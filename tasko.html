@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dice Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e9f5ff;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 40px;
+    }
+
+    .dice-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      margin-bottom: 20px;
+    }
+
+    .dice {
+      font-size: 80px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #result {
+      font-size: 24px;
+      margin-top: 30px;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 Simple Dice Game</h1>
+
+  <div class="dice-container">
+    <div id="player1" class="dice">⚀</div>
+    <div id="player2" class="dice">⚀</div>
+  </div>
+
+  <button onclick="rollDice()">Roll Dice</button>
+
+  <div id="result"></div>
+
+  <script>
+    const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+    function rollDice() {
+      const roll1 = Math.floor(Math.random() * 6);
+      const roll2 = Math.floor(Math.random() * 6);
+
+      document.getElementById('player1').textContent = diceFaces[roll1];
+      document.getElementById('player2').textContent = diceFaces[roll2];
+
+      if (roll1 > roll2) {
+        document.getElementById('result').textContent = "Player 1 Wins!";
+      } else if (roll2 > roll1) {
+        document.getElementById('result').textContent = "Player 2 Wins!";
+      } else {
+        document.getElementById('result').textContent = "It's a Draw!";
+      }
+    }
+  </script>
+
+</body>
+</html>

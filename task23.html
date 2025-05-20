@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎵 Favorite Song Selector</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    form input[type="text"] {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form input[type="submit"] {
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      padding: 10px;
+    }
+
+    form input[type="submit"]:hover {
+      background: #2980b9;
+    }
+
+    .error {
+      color: red;
+      grid-column: span 3;
+      margin-top: -10px;
+    }
+
+    .song-list h2 {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button.remove {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      button.remove {
+        margin-top: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎵 My Favorite Songs</h1>
+    </header>
+
+    <form id="songForm">
+      <input type="text" id="songName" placeholder="Song Name" required />
+      <input type="text" id="artistName" placeholder="Artist Name" required />
+      <input type="submit" value="Add Song" />
+      <p class="error" id="formError"></p>
+    </form>
+
+    <section class="song-list">
+      <h2>Selected Songs:</h2>
+      <ul id="songs"></ul>
+    </section>
+  </div>
+
+  <script>
+    document.getElementById("songForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const songName = document.getElementById("songName").value.trim();
+      const artistName = document.getElementById("artistName").value.trim();
+      const errorElem = document.getElementById("formError");
+
+      if (!songName || !artistName) {
+        errorElem.textContent = "Please enter both song and artist name.";
+        return;
+      }
+
+      errorElem.textContent = "";
+
+      const li = document.createElement("li");
+      li.textContent = `${songName} - ${artistName}`;
+
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.className = "remove";
+      removeBtn.onclick = () => li.remove();
+
+      li.appendChild(removeBtn);
+      document.getElementById("songs").appendChild(li);
+
+      // Reset form
+      document.getElementById("songForm").reset();
+    });
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎵 Favorite Song Selector</title>
+  <title>🎵 Favorite Songs with Cover & Background</title>
   <style>
     * {
       margin: 0;
@@ -13,17 +13,18 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: #f2f2f2;
+      background: url('RS_500_Great_Songs_1800x1200.webp') no-repeat center center fixed;
+      background-size: cover;
       padding: 20px;
     }
 
     .container {
       max-width: 700px;
       margin: auto;
-      background: white;
+      background: rgba(255, 255, 255, 0.85);
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
     header {
@@ -33,12 +34,13 @@
 
     form {
       display: grid;
-      grid-template-columns: 1fr 1fr auto;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
-    form input[type="text"] {
+    form input[type="text"],
+    form input[type="file"] {
       padding: 10px;
       font-size: 1rem;
       border: 1px solid #ccc;
@@ -46,6 +48,8 @@
     }
 
     form input[type="submit"] {
+      grid-column: span 2;
+      padding: 10px;
       background: #3498db;
       color: white;
       border: none;
@@ -53,7 +57,6 @@
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s;
-      padding: 10px;
     }
 
     form input[type="submit"]:hover {
@@ -61,30 +64,40 @@
     }
 
     .error {
+      grid-column: span 2;
       color: red;
-      grid-column: span 3;
-      margin-top: -10px;
-    }
-
-    .song-list h2 {
-      margin-bottom: 10px;
     }
 
     ul {
       list-style: none;
+      padding: 0;
     }
 
     li {
       background: #ecf0f1;
       padding: 10px;
-      border-radius: 5px;
       margin-bottom: 10px;
+      border-radius: 6px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
-    button.remove {
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .song-info img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .remove {
       background: #e74c3c;
       color: white;
       border: none;
@@ -102,30 +115,24 @@
         flex-direction: column;
         align-items: flex-start;
       }
-
-      button.remove {
-        margin-top: 5px;
-      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🎵 My Favorite Songs</h1>
+      <h1>🎵 Favorite Songs with Cover Images</h1>
     </header>
 
     <form id="songForm">
       <input type="text" id="songName" placeholder="Song Name" required />
       <input type="text" id="artistName" placeholder="Artist Name" required />
+      <input type="file" id="coverImage" accept="image/*" />
       <input type="submit" value="Add Song" />
       <p class="error" id="formError"></p>
     </form>
 
-    <section class="song-list">
-      <h2>Selected Songs:</h2>
-      <ul id="songs"></ul>
-    </section>
+    <ul id="songs"></ul>
   </div>
 
   <script>
@@ -134,6 +141,7 @@
 
       const songName = document.getElementById("songName").value.trim();
       const artistName = document.getElementById("artistName").value.trim();
+      const coverFile = document.getElementById("coverImage").files[0];
       const errorElem = document.getElementById("formError");
 
       if (!songName || !artistName) {
@@ -144,19 +152,33 @@
       errorElem.textContent = "";
 
       const li = document.createElement("li");
-      li.textContent = `${songName} - ${artistName}`;
+
+      const songInfo = document.createElement("div");
+      songInfo.className = "song-info";
+
+      if (coverFile) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(coverFile);
+        img.alt = "Cover";
+        songInfo.appendChild(img);
+      }
+
+      const text = document.createElement("span");
+      text.textContent = `${songName} - ${artistName}`;
+      songInfo.appendChild(text);
 
       const removeBtn = document.createElement("button");
       removeBtn.textContent = "Remove";
       removeBtn.className = "remove";
       removeBtn.onclick = () => li.remove();
 
+      li.appendChild(songInfo);
       li.appendChild(removeBtn);
       document.getElementById("songs").appendChild(li);
 
-      // Reset form
       document.getElementById("songForm").reset();
     });
   </script>
 </body>
 </html>
+

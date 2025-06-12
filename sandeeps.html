@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium e-commerce store with blog featuring quality products">
+    <title>ShopNest | E-Commerce & Blog</title>
+    <style>
+        /* CSS Reset & Base Styles (Minified) */
+        :root{
+            --primary:#4a6fa5;  /* Changed from dark blue to softer blue */
+            --secondary:#ff7e5f; /* Changed from red to coral/orange */
+            --light:#f8f9fa;     /* Very light gray */
+            --dark:#343a40;     /* Dark gray */
+            --success:#28a745;   /* Kept green for success */
+            --warning:#ffc107;   /* Kept yellow for warning */
+            --font:'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+            --shadow:0 4px 6px rgba(0,0,0,0.1)
+        }
+        *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--font);line-height:1.6;color:#333;background-color:#f9f9f9}a{text-decoration:none;color:inherit}img{max-width:100%;height:auto;display:block}ul{list-style:none}.container{width:100%;max-width:1200px;margin:0 auto;padding:0 15px}.btn{display:inline-block;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:4px;cursor:pointer;transition:all 0.3s ease}.btn:hover{background:var(--secondary);transform:translateY(-2px)}.text-center{text-align:center}.mt-1{margin-top:0.5rem}.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}.mt-4{margin-top:2rem}
+
+        /* Header Styles */
+        header{
+            background:rgba(255,255,255,0.95); /* Semi-transparent white */
+            box-shadow:var(--shadow);
+            position:sticky;
+            top:0;
+            z-index:1000
+        }
+        .header-container{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:1rem 0
+        }
+        .logo{
+            font-size:1.5rem;
+            font-weight:700;
+            color:var(--primary)
+        }
+        .logo span{
+            color:var(--secondary)
+        }
+        .nav-toggle{
+            display:none;
+            font-size:1.5rem;
+            cursor:pointer
+        }
+        .nav-links{
+            display:flex;
+            gap:1.5rem
+        }
+        .nav-links a{
+            font-weight:500;
+            transition:color 0.3s;
+            position:relative
+        }
+        .nav-links a:hover{
+            color:var(--secondary)
+        }
+        .nav-links a::after{
+            content:'';
+            position:absolute;
+            bottom:-5px;
+            left:0;
+            width:0;
+            height:2px;
+            background:var(--secondary);
+            transition:width 0.3s
+        }
+        .nav-links a:hover::after{
+            width:100%
+        }
+        .cart-icon{
+            position:relative
+        }
+        .cart-count{
+            position:absolute;
+            top:-10px;
+            right:-10px;
+            background:var(--secondary);
+            color:white;
+            border-radius:50%;
+            width:20px;
+            height:20px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:0.7rem
+        }
+
+        /* Hero Section */
+        .hero{
+            background:linear-gradient(rgba(74, 111, 165, 0.8), rgba(255, 126, 95, 0.7)), 
+                      url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+            color:white;
+            padding:5rem 0;
+            text-align:center
+        }
+        .hero h1{
+            font-size:2.5rem;
+            margin-bottom:1rem
+        }
+        .hero p{
+            font-size:1.2rem;
+            max-width:700px;
+            margin:0 auto 2rem
+        }
+        .hero-btns{
+            display:flex;
+            gap:1rem;
+            justify-content:center
+        }
+
+        /* Featured Products */
+        .section-title{
+            margin-bottom:2rem;
+            font-size:1.8rem;
+            color:var(--primary);
+            position:relative;
+            display:inline-block
+        }
+        .section-title::after{
+            content:'';
+            position:absolute;
+            bottom:-10px;
+            left:0;
+            width:50%;
+            height:3px;
+            background:var(--secondary)
+        }
+        .products-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+            gap:2rem;
+            margin-top:2rem
+        }
+        .product-card{
+            background:white;
+            border-radius:8px;
+            overflow:hidden;
+            box-shadow:var(--shadow);
+            transition:transform 0.3s
+        }
+        .product-card:hover{
+            transform:translateY(-5px)
+        }
+        .product-img{
+            height:200px;
+            background:#eee;
+            position:relative;
+            overflow:hidden
+        }
+        .product-img img{
+            width:100%;
+            height:100%;
+            object-fit:cover
+        }
+        .product-badge{
+            position:absolute;
+            top:10px;
+            right:10px;
+            background:var(--secondary);
+            color:white;
+            padding:5px 10px;
+            border-radius:4px;
+            font-size:0.8rem
+        }
+        .product-info{
+            padding:1rem
+        }
+        .product-title{
+            font-weight:600;
+            margin-bottom:0.5rem
+        }
+        .product-price{
+            font-weight:700;
+            color:var(--secondary);
+            margin:0.5rem 0
+        }
+        .original-price{
+            text-decoration:line-through;
+            color:#777;
+            font-size:0.9rem;
+            margin-left:5px
+        }
+        .rating{
+            color:var(--warning);
+            margin:0.5rem 0
+        }
+
+        /* Blog Section */
+        .blog{
+            background-color:#f1f5f9; /* Light blue-gray background */
+            padding:4rem 0
+        }
+        .blog-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+            gap:2rem
+        }
+        .blog-card{
+            background:white;
+            border-radius:8px;
+            overflow:hidden;
+            box-shadow:var(--shadow)
+        }
+        .blog-img{
+            height:200px;
+            background:#eee
+        }
+        .blog-img img{
+            width:100%;
+            height:100%;
+            object-fit:cover
+        }
+        .blog-content{
+            padding:1rem
+        }
+        .blog-date{
+            font-size:0.8rem;
+            color:#777
+        }
+        .blog-title{
+            margin:0.5rem 0;
+            font-size:1.2rem
+        }
+        .blog-excerpt{
+            color:#555;
+            margin-bottom:1rem
+        }
+        .read-more{
+            color:var(--primary);
+            font-weight:600;
+            display:inline-block
+        }
+
+        /* Newsletter */
+        .newsletter{
+            background:linear-gradient(135deg, var(--primary), var(--secondary));
+            color:white;
+            padding:3rem 0;
+            text-align:center
+        }
+        .newsletter h2{
+            margin-bottom:1rem
+        }
+        .newsletter-form{
+            max-width:500px;
+            margin:0 auto;
+            display:flex;
+            gap:0.5rem
+        }
+        .newsletter-input{
+            flex:1;
+            padding:10px;
+            border:none;
+            border-radius:4px
+        }
+        .newsletter-btn{
+            background:var(--dark);
+            border:none
+        }
+        .newsletter-btn:hover{
+            background:#495057
+        }
+
+        /* Footer */
+        footer{
+            background:var(--dark);
+            color:white;
+            padding:3rem 0
+        }
+        .footer-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+            gap:2rem
+        }
+        .footer-col h3{
+            margin-bottom:1rem;
+            font-size:1.2rem
+        }
+        .footer-links li{
+            margin-bottom:0.5rem
+        }
+        .footer-links a{
+            transition:color 0.3s
+        }
+        .footer-links a:hover{
+            color:var(--secondary)
+        }
+        .social-links{
+            display:flex;
+            gap:1rem;
+            margin-top:1rem
+        }
+        .social-links a{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            width:40px;
+            height:40px;
+            background:rgba(255,255,255,0.1);
+            border-radius:50%;
+            transition:all 0.3s
+        }
+        .social-links a:hover{
+            background:var(--secondary);
+            transform:translateY(-3px)
+        }
+        .copyright{
+            margin-top:2rem;
+            padding-top:1rem;
+            border-top:1px solid rgba(255,255,255,0.1);
+            text-align:center
+        }
+
+        /* Responsive Design */
+        @media (max-width:768px){
+            .nav-toggle{display:block}
+            .nav-links{
+                position:fixed;
+                top:70px;
+                left:-100%;
+                width:80%;
+                height:calc(100vh - 70px);
+                background:white;
+                flex-direction:column;
+                align-items:center;
+                padding:2rem 0;
+                transition:left 0.3s;
+                box-shadow:2px 0 5px rgba(0,0,0,0.1)
+            }
+            .nav-links.active{left:0}
+            .hero{padding:3rem 0}
+            .hero h1{font-size:2rem}
+            .newsletter-form{flex-direction:column}
+        }
+        @media (max-width:480px){
+            .hero-btns{
+                flex-direction:column;
+                width:80%;
+                margin:0 auto
+            }
+            .btn{width:100%}
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">Shop<span>Nest</span></a>
+            <div class="nav-toggle">☰</div>
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#blog">Blog</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <a href="#" class="cart-icon">🛒 <span class="cart-count">0</span></a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Premium Products for Your Lifestyle</h1>
+            <p>Discover our curated collection of high-quality products and read our latest blog posts about modern living.</p>
+            <div class="hero-btns">
+                <a href="#products" class="btn">Shop Now</a>
+                <a href="#blog" class="btn btn-outline">Read Blog</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section products" id="products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid" id="products-container">
+                <!-- Products will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="section blog" id="blog">
+        <div class="container">
+            <h2 class="section-title">Latest Blog Posts</h2>
+            <div class="blog-grid" id="blog-container">
+                <!-- Blog posts will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Get the latest updates on new products and blog posts.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email address" class="newsletter-input" required>
+                <button type="submit" class="btn newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>ShopNest</h3>
+                    <p>Your one-stop shop for premium products and lifestyle inspiration.</p>
+                    <div class="social-links">
+                        <a href="#">f</a>
+                        <a href="#">t</a>
+                        <a href="#">in</a>
+                        <a href="#">ig</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Customer Service</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns & Refunds</a></li>
+                        <li><a href="#">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <p>123 Hyderabad, India</p>
+                    <p>Email: vamshikotcherla@gmail.com</p>
+                    <p>Phone: 9876543210</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 ShopNest. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const productsContainer = document.getElementById('products-container');
+        const blogContainer = document.getElementById('blog-container');
+        const cartCount = document.querySelector('.cart-count');
+
+        // Mobile Navigation Toggle
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Sample Product Data with Real Image URLs
+        const products = [
+            {
+                id: 1,
+                name: "Wireless Headphones",
+                price: 99.99,
+                originalPrice: 129.99,
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.5,
+                badge: "Sale"
+            },
+            {
+                id: 2,
+                name: "Smart Watch",
+                price: 199.99,
+                originalPrice: 249.99,
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.2,
+                badge: "Popular"
+            },
+            {
+                id: 3,
+                name: "Bluetooth Speaker",
+                price: 79.99,
+                originalPrice: 99.99,
+                image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.7,
+                badge: "Best Seller"
+            },
+            {
+                id: 4,
+                name: "Laptop Backpack",
+                price: 49.99,
+                originalPrice: 59.99,
+                image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.3,
+                badge: "New"
+            },
+            {
+                id: 5,
+                name: "Wireless Earbuds",
+                price: 129.99,
+                originalPrice: 159.99,
+                image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.8,
+                badge: "Trending"
+            },
+            {
+                id: 6,
+                name: "Fitness Tracker",
+                price: 89.99,
+                originalPrice: 119.99,
+                image: "https://images.unsplash.com/photo-1576243345690-4e4b79b63288?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.1,
+                badge: "Sale"
+            }
+        ];
+
+        // Sample Blog Data with Real Image URLs
+        const blogPosts = [
+            {
+                id: 2,
+                title: "The Future of Wearable Technology",
+                excerpt: "Explore the latest trends in wearable tech and what to expect in the coming years.",
+                date: "June 2, 2025",
+                image: "https://images.unsplash.com/photo-1461141346587-763ab02bced9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 3,
+                title: "Sustainable Shopping Habits",
+                excerpt: "How to make more eco-friendly choices when shopping for tech and accessories.",
+                date: "June 10, 2025",
+                image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                id: 4,
+                title: "Essential Tech for Digital Nomads",
+                excerpt: "Discover the must-have gadgets and tools for working remotely from anywhere.",
+                date: "June 18, 2025",
+                image: "https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+
+        // Cart functionality
+        let cart = [];
+
+        // Display Products
+        function displayProducts() {
+            productsContainer.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
+                        <div class="product-price">
+                            $${product.price.toFixed(2)}
+                            ${product.originalPrice ? `<span class="original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}
+                        </div>
+                        <button class="btn add-to-cart" data-id="${product.id}">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', addToCart);
+            });
+        }
+
+        // Display Blog Posts
+        function displayBlogPosts() {
+            blogContainer.innerHTML = blogPosts.map(post => `
+                <div class="blog-card">
+                    <div class="blog-img">
+                        <img src="${post.image}" alt="${post.title}" loading="lazy">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-date">${post.date}</span>
+                        <h3 class="blog-title">${post.title}</h3>
+                        <p class="blog-excerpt">${post.excerpt}</p>
+                        <a href="#" class="read-more">Read More →</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add to Cart Function
+        function addToCart(e) {
+            const productId = parseInt(e.target.getAttribute('data-id'));
+            const product = products.find(p => p.id === productId);
+            
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            
+            updateCartCount();
+            
+            // Show a quick confirmation
+            e.target.textContent = 'Added!';
+            setTimeout(() => {
+                e.target.textContent = 'Add to Cart';
+            }, 1000);
+        }
+
+        // Update Cart Count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+        }
+
+        // Newsletter Form Submission
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            // In a real app, you would send this to your server
+            alert(`Thanks for subscribing with ${email}!`);
+            this.reset();
+        });
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            displayProducts();
+            displayBlogPosts();
+            
+            // Preload important images (like hero image)
+            const heroImage = new Image();
+            heroImage.src = 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80';
+        });
+
+        // Simple service worker registration for offline capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(registration => {
+                    console.log('ServiceWorker registration successful');
+                }).catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
